@@ -1,0 +1,50 @@
+{% extends "bootstrap/base.html" %}
+
+{% block head %}
+    <style>
+        .login {
+            font-size: 2em;
+            color: white;
+            padding-top: 15px;
+            padding-right: 5px;
+            text-decoration: none;
+            display: block;
+        }
+        .login a:link,
+        .login a:visited{
+            color: white;
+        }
+
+        .login:hover{
+            text-decoration: underline;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col navbar navbar-expand-sm navbar-gold" role="navigation">
+        <div class="navbar-collapse collapse">
+            <h1 class="navbar-brand">Rate My Course</h1>
+            <ul class="navbar-nav">
+                <!-- Inline styling of Home navigation (Home link resets the page to default) -->
+                <li class="nav-item"><a class="nav-link active" style="font-size: 2em" href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('courses') }}">Courses</a></li>
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('search') }}">Search</a></li>
+            </ul>
+        </div>
+    </div>
+    {% if session['id'] %}
+    <div class="col text-right bg-dark-gold" style="margin-left: -2px;margin-bottom: 20px">
+        <a class="login" style="justify-content: center; padding-top: 15px;" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    {% else %}
+        <div class="col text-right bg-dark-gold" style="margin-left: -2px;margin-bottom: 20px">
+            <a class="login" href="{{ url_for('login') }}">Login</a>
+        </div>
+    {% endif %}
+    </div>
+    </div>
+{% endblock %}

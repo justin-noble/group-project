@@ -1,0 +1,149 @@
+{% extends "bootstrap/base.html" %}
+<!-- Tooltip Title -->
+{% block title %}Rate My Course | Home{% endblock %}
+{% block head %}
+    <!-- Preserve yhe style of the base template -->
+    {{ super() }}
+    <!-- Include Bootstrap CSS Stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- In page styling - Background Image, Bootstrap Elements and Pagination elements -->
+    <style>
+        body {
+            background-color: #501214;
+            color: lightgray;
+        }
+
+        .pagination
+        {
+            background-color: white;
+            font-size: 15px;
+        }
+        .pagination > li > a
+        {
+            background-color: white;
+            color: #5A4181;
+            font-size: 15px;
+        }
+
+        .pagination > li > a:focus,
+        .pagination > li > a:hover,
+        .pagination > li > span:focus,
+        .pagination > li > span:hover
+        {
+            color: #5a5a5a;
+            background-color: #eee;
+            border-color: #ddd;
+        }
+
+        .pagination > .active > a
+        {
+            color: white;
+            background-color: #5A4181 !Important;
+            border: solid 1px #5A4181 !Important;
+        }
+
+        .pagination > .active > a:hover
+        {
+            background-color: #5A4181 !Important;
+            border: solid 1px #5A4181;
+        }
+
+        .navbar-gold {
+            background-color: #6A5638;
+        }
+        .navbar-gold .nav-link{
+            color: white;
+        }
+
+        .navbar-gold .navbar-brand {
+            color: white;
+            font-size: 3rem;
+            text-align: center;
+            padding-top: 15px;
+        }
+
+        .bg-maroon {
+            background-color: #501214;
+        }
+
+        .bg-dark-gold {
+            background-color: #6A5638;
+        }
+
+        .bg-gold {
+            background-color: #EBBA45;
+        }
+
+        .bg-salmon {
+            background-color: #CA2A2D;
+        }
+
+
+    </style>
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- Preserve scripts of base template -->
+    {{ super() }}
+    <!-- Include Bootstrap and jQuery scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock %}
+
+<!-- Navigation bar -->
+{% include 'nav.html' %}
+
+{% block content %}
+<div class="container-fluid" style="border-spacing: 10px 0px; min-height: 100%; height: 100%;">
+    <div class="row" style="padding: 10px;">
+        <div class="card">
+            <h1 class="card-title">{{ course[0] }} - {{ course[3] }}</h1>
+            <div class="col card" style="border-spacing: 2px 2px">
+                <div>
+                <h2 style="color: black;">Name: {{ teacher[1] }}</h2>
+                <h2 style="color: black;">Section: {{ teacher[2] }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px;">
+        <div class="card">
+                <h2 style="color: darkgray">Write a review!</h2>
+                <form action="" method="post" novalidate align="left" style="">
+                    {{ form.hidden_tag() }}
+                    {% if 'id' in session and session['id'] != None %}
+                        {{ form.review(cols="70", rows="10", placeholder="Write a review!") }}
+                        <div class="msg">{{ msg }}</div>
+                        {{ form.submit(class_="btn btn-success")}}
+                    {% else %}
+                        {{ form.review(cols="70", rows="10", placeholder="Login to write a review", disabled="true") }}
+                        <div class="msg">{{ msg }}</div>
+                        {{ form.submit(class_="btn btn-disabled", disabled="true")}}
+                    {% endif %}
+
+                </form>
+            </div>
+        </div>
+    <div class="row" style="padding: 10px;">
+        <div class="card" >
+
+            <h2>Reviews</h2>
+            {% if reviews|length == 0 %}
+            <div class="card">
+                <p>Be the first to write a review!</p>
+            </div>
+            {% else %}
+                {% for review in reviews %}
+                <div class="row" style="padding-top: 15px; padding-bottom: 15px;">
+                    <div class="card" style="color: darkgrey; width: 95%">
+                        <h3>{{ review[6] }}</h3>
+                        <span>{{ review[3] }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
