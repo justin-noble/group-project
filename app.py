@@ -126,7 +126,6 @@ def mycourses():
 
     cursor = conn.cursor()
 
-
     form = CoursesForm()
 
     print('hi', request.method, form.is_submitted(), form.validate())

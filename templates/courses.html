@@ -51,7 +51,7 @@
                 <div class="row">
             {% endif %}
             <div class="col card m-1 text-dark bg-light" >
-                <h2 class="card-header" style="cursor: pointer" onclick="(function(event){elem = $('#{{ department }}'); if(elem.css('display') == 'none'){elem.show()}else{elem.hide()}})();">{{department}}</h2>
+                <h2 class="card-header" style="cursor: pointer" onclick="(function(event){elem = $('#{{ department }}'); if(elem.css('display') == 'none'){elem.show(300)}else{elem.hide(300)}})();">{{department}}</h2>
                 <div id="{{ department }}" class="card-body" style="display: none;">
                     <ul class="list-group list-group-flush">
                     {% for course in courses[department] %}
