@@ -2,6 +2,19 @@
 
 {% block head %}
     <style>
+        .navbar-gold {
+            background-color: #6A5638;
+        }
+        .navbar-gold .nav-link{
+            color: white;
+        }
+
+        .navbar-gold .navbar-brand {
+            color: white;
+            font-size: 3rem;
+            text-align: center;
+            padding-top: 15px;
+        }
         .login {
             font-size: 2em;
             color: white;
@@ -33,6 +46,7 @@
                 <li class="nav-item"><a class="nav-link active" style="font-size: 2em" href="{{ url_for('home') }}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('courses') }}">Courses</a></li>
                 <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('search') }}">Search</a></li>
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('mycourses') }}">My Courses</a></li>
             </ul>
         </div>
     </div>

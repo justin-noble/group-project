@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 <!-- Tooltip Title -->
-{% block title %}Rate My Course | Home{% endblock %}
+{% block title %}Rate My Course | Review{% endblock %}
 {% block head %}
     <!-- Preserve yhe style of the base template -->
     {{ super() }}
@@ -11,55 +11,6 @@
         body {
             background-color: #501214;
             color: lightgray;
-        }
-
-        .pagination
-        {
-            background-color: white;
-            font-size: 15px;
-        }
-        .pagination > li > a
-        {
-            background-color: white;
-            color: #5A4181;
-            font-size: 15px;
-        }
-
-        .pagination > li > a:focus,
-        .pagination > li > a:hover,
-        .pagination > li > span:focus,
-        .pagination > li > span:hover
-        {
-            color: #5a5a5a;
-            background-color: #eee;
-            border-color: #ddd;
-        }
-
-        .pagination > .active > a
-        {
-            color: white;
-            background-color: #5A4181 !Important;
-            border: solid 1px #5A4181 !Important;
-        }
-
-        .pagination > .active > a:hover
-        {
-            background-color: #5A4181 !Important;
-            border: solid 1px #5A4181;
-        }
-
-        .navbar-gold {
-            background-color: #6A5638;
-        }
-        .navbar-gold .nav-link{
-            color: white;
-        }
-
-        .navbar-gold .navbar-brand {
-            color: white;
-            font-size: 3rem;
-            text-align: center;
-            padding-top: 15px;
         }
 
         .bg-maroon {
@@ -95,10 +46,10 @@
 {% include 'nav.html' %}
 
 {% block content %}
-<div class="container-fluid" style="border-spacing: 10px 0px; min-height: 100%; height: 100%;">
-    <div class="row" style="padding: 10px;">
-        <div class="card">
-            <h1 class="card-title">{{ course[0] }} - {{ course[3] }}</h1>
+<div class="container" style="border-spacing: 10px 0px; min-height: 100%; height: 100%;">
+    <div class="row my-1">
+        <div class="card  text-dark bg-light">
+            <h1 class="card-header">{{ course[0] }} - {{ course[3] }}</h1>
             <div class="col card" style="border-spacing: 2px 2px">
                 <div>
                 <h2 style="color: black;">Name: {{ teacher[1] }}</h2>
@@ -107,38 +58,42 @@
             </div>
         </div>
     </div>
-    <div class="row" style="padding: 10px;">
-        <div class="card">
-                <h2 style="color: darkgray">Write a review!</h2>
-                <form action="" method="post" novalidate align="left" style="">
+    <div class="row my-1">
+        <div class="card  text-dark bg-light">
+                <h2 class="card-header">Write a review!</h2>
+                <form class="card-body" action="" method="post" novalidate align="left" style="">
                     {{ form.hidden_tag() }}
                     {% if 'id' in session and session['id'] != None %}
                         {{ form.review(cols="70", rows="10", placeholder="Write a review!") }}
                         <div class="msg">{{ msg }}</div>
-                        {{ form.submit(class_="btn btn-success")}}
+                        {{ form.submit(class_="btn btn-primary")}}
                     {% else %}
                         {{ form.review(cols="70", rows="10", placeholder="Login to write a review", disabled="true") }}
                         <div class="msg">{{ msg }}</div>
-                        {{ form.submit(class_="btn btn-disabled", disabled="true")}}
+                        {{ form.submit(class_="btn btn-primary", disabled="true")}}
                     {% endif %}
 
                 </form>
             </div>
         </div>
-    <div class="row" style="padding: 10px;">
-        <div class="card" >
+    <div class="row my-1">
+        <div class="card text-dark bg-light" >
 
-            <h2>Reviews</h2>
+            <h2 class="card-header">Reviews</h2>
             {% if reviews|length == 0 %}
-            <div class="card">
-                <p>Be the first to write a review!</p>
+            <div class="card  text-dark bg-light">
+                <div class="card-body">
+                    <p class="card-text fs-3">Be the first to write a review!</p>
+                </div>
             </div>
             {% else %}
                 {% for review in reviews %}
                 <div class="row" style="padding-top: 15px; padding-bottom: 15px;">
-                    <div class="card" style="color: darkgrey; width: 95%">
-                        <h3>{{ review[6] }}</h3>
-                        <span>{{ review[3] }}</span>
+                    <div class="card  text-dark bg-light" style="color: darkgrey; width: 95%">
+                        <h3 class="card-header">{{ review[6] }}</h3>
+                        <div class="card-body">
+                            <p class="card-text fs-4">{{ review[3] }}</p>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}

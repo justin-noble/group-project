@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 <!-- Tooltip Title -->
-{% block title %}Rate My Course | Home{% endblock %}
+{% block title %}Rate My Course | Courses{% endblock %}
 {% block head %}
     <!-- Preserve yhe style of the base template -->
     {{ super() }}
@@ -11,55 +11,6 @@
         body {
             background-color: #501214;
             color: lightgray;
-        }
-
-        .pagination
-        {
-            background-color: white;
-            font-size: 15px;
-        }
-        .pagination > li > a
-        {
-            background-color: white;
-            color: #5A4181;
-            font-size: 15px;
-        }
-
-        .pagination > li > a:focus,
-        .pagination > li > a:hover,
-        .pagination > li > span:focus,
-        .pagination > li > span:hover
-        {
-            color: #5a5a5a;
-            background-color: #eee;
-            border-color: #ddd;
-        }
-
-        .pagination > .active > a
-        {
-            color: white;
-            background-color: #5A4181 !Important;
-            border: solid 1px #5A4181 !Important;
-        }
-
-        .pagination > .active > a:hover
-        {
-            background-color: #5A4181 !Important;
-            border: solid 1px #5A4181;
-        }
-
-        .navbar-gold {
-            background-color: #6A5638;
-        }
-        .navbar-gold .nav-link{
-            color: white;
-        }
-
-        .navbar-gold .navbar-brand {
-            color: white;
-            font-size: 3rem;
-            text-align: center;
-            padding-top: 15px;
         }
 
         .bg-maroon {
@@ -91,34 +42,26 @@
 {% endblock %}
 
 <!-- Navigation bar -->
-{% block navbar %}
-    <div class="navbar navbar-expand-sm navbar-gold" role="navigation">
-        <div class="navbar-collapse collapse">
-            <h1 class="navbar-brand">Rate My Course</h1>
-            <ul class="navbar-nav">
-                <!-- Inline styling of Home navigation (Home link resets the page to default) -->
-                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('home') }}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('courses') }}">Courses</a></li>
-                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="#">Search Courses</a></li>
-            </ul>
-        </div>
-    </div>
-{% endblock %}
+{% include 'nav.html' %}
 
 {% block content %}
-    <div class="container-fluid" style="border-spacing: 10px 0px; min-height: 100%; height: 100%;">
+    <div class="container" style="border-spacing: 10px 0px; min-height: 100%; height: 100%;">
         {% for department in courses %}
             {% if loop.index0 % 2 == 0 %}
                 <div class="row">
             {% endif %}
-            <div style="padding: 5px; color: darkgray" class="col card" >
-                <h2 style="cursor: pointer" onclick="(function(event){elem = $('#{{ department }}'); if(elem.css('display') == 'none'){elem.show()}else{elem.hide()}})();">{{department}}</h2>
-                <div id="{{ department }}" class="card bg-dark-gold" style="display: none;">
+            <div class="col card m-1 text-dark bg-light" >
+                <h2 class="card-header" style="cursor: pointer" onclick="(function(event){elem = $('#{{ department }}'); if(elem.css('display') == 'none'){elem.show()}else{elem.hide()}})();">{{department}}</h2>
+                <div id="{{ department }}" class="card-body" style="display: none;">
+                    <ul class="list-group list-group-flush">
                     {% for course in courses[department] %}
-                        <div class="card" style="border-spacing: 2px 2px;">
+                        <li class="list-group-item">
+                        <div style="border-spacing: 2px 2px;">
                             <h3><a style="color: darkgrey;" href="{{ url_for('course', course_id=course[0]) }}">{{ course[0] }} - {{ course[3] }}</a></h3>
                         </div>
+                        </li>
                     {% endfor %}
+                    </ul>
                 </div>
             </div>
             {% if loop.index % 2 == 0 %}

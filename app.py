@@ -8,7 +8,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_bootstrap import Bootstrap
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, EmailField, TextAreaField
+from wtforms import StringField, SubmitField, PasswordField, EmailField, TextAreaField, SelectMultipleField, widgets, \
+    SelectField
 from wtforms.validators import InputRequired
 
 conn = sqlite3.connect('rmc.sqlite', check_same_thread=False)
@@ -55,11 +56,20 @@ def setup():
         );
     """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS `user_courses` (
+            user_id INTEGER,
+            course_id,
+            UNIQUE(user_id, course_id)
+        );
+    """)
+
     courses = json.load(open('static/data.json'))
     for department in courses:
         for course in courses[department]:
-            cursor.execute('INSERT OR IGNORE INTO courses (course_id, department, requirements, title) VALUES (?, ?, ?, ?)',
-                           (course['number'], department, '', course['title']))
+            cursor.execute(
+                'INSERT OR IGNORE INTO courses (course_id, department, requirements, title) VALUES (?, ?, ?, ?)',
+                (course['number'], department, '', course['title']))
             if "teachers" in course and len(course['teachers']['classes']) > 0:
                 for teacher in course['teachers']['classes']:
                     cursor.execute('INSERT OR IGNORE INTO teachers (course_id, name, section) VALUES (?, ? ,?)',
@@ -73,8 +83,9 @@ boostrap = Bootstrap(app)
 
 app.secret_key = 'adasdasdas4856das56d4as6'
 
-setup()
-
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 class RegisterForm(FlaskForm):
     username = StringField('Username: ', validators=[InputRequired()])
@@ -82,23 +93,54 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Password: ', validators=[InputRequired()])
     submit = SubmitField('Register!')
 
+
 class LoginForm(FlaskForm):
     username = StringField('Username: ', validators=[InputRequired()])
     password = PasswordField('Password: ', validators=[InputRequired()])
-    submit = SubmitField('Register!')
+    submit = SubmitField('Login!')
+
 
 class ReviewForm(FlaskForm):
     review = TextAreaField('Review', validators=[InputRequired()])
     submit = SubmitField('Submit Review!')
 
+
 class SearchForm(FlaskForm):
     search = StringField('', validators=[InputRequired()])
     submit = SubmitField('Search!')
+
+class CoursesForm(FlaskForm):
+    courses = MultiCheckboxField(label='', validators=[InputRequired()], choices=conn.cursor().execute("SELECT course_id, title FROM courses ORDER BY course_id;").fetchall())
+    submit = SubmitField('Save Courses')
+
 
 
 @app.route('/')
 def home():  # put application's code here
     return render_template('home.html')
+
+@app.route('/mycourses', methods=['GET', 'POST'])
+def mycourses():
+    if not 'id' in session or not session['id']:
+        return redirect(url_for('home'))
+
+    cursor = conn.cursor()
+
+
+    form = CoursesForm()
+
+    print('hi', request.method, form.is_submitted(), form.validate())
+    if request.method == 'POST' and form.validate_on_submit():
+        completed = form.courses.data
+        print(completed)
+        for course in completed:
+            cursor.execute('INSERT OR IGNORE INTO user_courses (user_id, course_id) VALUES (?, ?)', (session['id'], course))
+        conn.commit()
+
+    completed_courses = cursor.execute('SELECT course_id FROm user_courses WHERE user_id = ?',
+                                       (session['id'],)).fetchall()
+    print(completed_courses)
+    return render_template('mycourses.html', form=form, completed=json.dumps(completed_courses))
 
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -108,7 +150,8 @@ def search():
     if request.method == 'POST' and form.validate_on_submit():
         search = form.search.data
         cursor = conn.cursor()
-        courses = cursor.execute("SELECT * FROM courses WHERE course_id LIKE ? OR title LIKE ?", ('%'+search+'%','%'+search+'%')).fetchall()
+        courses = cursor.execute("SELECT * FROM courses WHERE course_id LIKE ? OR title LIKE ?",
+                                 ('%' + search + '%', '%' + search + '%')).fetchall()
     return render_template('search.html', form=form, courses=courses)
 
 
@@ -118,6 +161,7 @@ def course(course_id):
     course = cursor.execute('SELECT * FROM courses WHERe course_id=?', (course_id,)).fetchone()
     teachers = cursor.execute('SELECT * FROM teachers WHERE course_id=?', (course_id,)).fetchall()
     return render_template('course.html', course=course, teachers=teachers)
+
 
 @app.route('/review/<course_id>/<name>', methods=['GET', 'POST'])
 def review(course_id, name):
@@ -130,9 +174,13 @@ def review(course_id, name):
         conn.commit()
 
     course = cursor.execute('SELECT * FROM courses WHERe course_id=?', (course_id,)).fetchone()
-    teacher = cursor.execute('SELECT * FROM teachers WHERE course_id=? AND name=?', (course_id, unquote(name))).fetchone()
-    reviews = cursor.execute('SELECT * FROM course_reviews INNER JOIN users ON course_reviews.reviewer=users.user_id WHERe course_id=? AND teacher=?', (course_id, unquote(name))).fetchall()
+    teacher = cursor.execute('SELECT * FROM teachers WHERE course_id=? AND name=?',
+                             (course_id, unquote(name))).fetchone()
+    reviews = cursor.execute(
+        'SELECT * FROM course_reviews INNER JOIN users ON course_reviews.reviewer=users.user_id WHERe course_id=? AND teacher=?',
+        (course_id, unquote(name))).fetchall()
     return render_template('review.html', course=course, teacher=teacher, reviews=reviews, form=form)
+
 
 @app.route('/courses')
 def courses():
@@ -147,6 +195,7 @@ def courses():
 
     return render_template('courses.html', courses=courses)
 
+
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
@@ -154,6 +203,7 @@ def logout():
     session.pop('username', None)
     # Redirect to login page
     return redirect(url_for('login'))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():  # put application's code here
@@ -229,6 +279,7 @@ def register():  # put application's code here
         msg = 'Please fill out the form!'
     # Show registration form with message (if any)
     return render_template('register.html', msg=msg, form=form)
+
 
 if __name__ == '__main__':
     app.run()

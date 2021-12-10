@@ -1,7 +1,6 @@
-<!-- Jinja Template derived from Bootstrap base template -->
 {% extends "bootstrap/base.html" %}
 <!-- Tooltip Title -->
-{% block title %}Rate My Course | Login{% endblock %}
+{% block title %}Rate My Course | My Courses{% endblock %}
 {% block head %}
     <!-- Preserve yhe style of the base template -->
     {{ super() }}
@@ -30,6 +29,10 @@
             background-color: #CA2A2D;
         }
 
+        .courses {
+            list-style: none;
+        }
+
     </style>
 
 {% endblock %}
@@ -42,30 +45,33 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 {% endblock %}
 
-<!-- Navigation bar -->
 {% include 'nav.html' %}
 
 {% block content %}
-    <div class="container">
-    <div class="card bg-dark-gold w-25 mx-auto">
-        <h1 class="card-header" style="text-align: center">Login</h1>
-        <form action="" method="post" novalidate align="center" style="padding: 100px; text-align: center;">
-            {{ form.hidden_tag() }}
-            <div class="mb-3">
-                {{ form.username.label(class_="form-label fs-3") }}
-                {{ form.username(class_="form-control") }}
-            </div>
-            <div class="mb-3">
-                {{ form.password.label(class_="form-label fs-3") }}&nbsp;&nbsp;&nbsp;
-                {{ form.password(class_="form-control") }}
-            </div>
-            {% if msg|length > 0 %}
-                <div class="alert alert-danger w-100" role="alert">
-                  {{ msg }}
+    <div class="container" style="border-spacing: 10px 0px; min-height: 100%; height: 100%;">
+        <form action="" method="post" novalidate align="" style="">
+            <div class="card text-dark bg-light">
+                <h1 class="card-header">My Courses</h1>
+                <div class="card-body" >
+                    {{ form.hidden_tag() }}
+                    <div class="border">
+                        <label class="form-label fs-3">Courses</label>
+                        <div class="border" style="max-height: 500px; overflow: scroll; overflow-x: hidden">
+                        {{ form.courses(class_="form-control-input courses", type="checkbox") }}
+                        </div>
+                    </div>
+
+                    {{ form.submit(class_="btn btn-primary") }}
                 </div>
-            {% endif %}
-            {{ form.submit(class_="btn btn-primary fs-3")}}
+            </div>
         </form>
     </div>
-    </div>
+    <script>
+        function selected_completed(courses){
+            courses.forEach(elem => {
+                $(`input[value='${elem[0]}']`).prop( "checked", true );
+            })
+        }
+        selected_completed({{ completed|safe }})
+    </script>
 {% endblock %}

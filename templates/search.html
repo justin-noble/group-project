@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 <!-- Tooltip Title -->
-{% block title %}Rate My Course | Home{% endblock %}
+{% block title %}Rate My Course | Search{% endblock %}
 {% block head %}
     <!-- Preserve yhe style of the base template -->
     {{ super() }}
@@ -11,55 +11,6 @@
         body {
             background-color: #501214;
             color: lightgray;
-        }
-
-        .pagination
-        {
-            background-color: white;
-            font-size: 15px;
-        }
-        .pagination > li > a
-        {
-            background-color: white;
-            color: #5A4181;
-            font-size: 15px;
-        }
-
-        .pagination > li > a:focus,
-        .pagination > li > a:hover,
-        .pagination > li > span:focus,
-        .pagination > li > span:hover
-        {
-            color: #5a5a5a;
-            background-color: #eee;
-            border-color: #ddd;
-        }
-
-        .pagination > .active > a
-        {
-            color: white;
-            background-color: #5A4181 !Important;
-            border: solid 1px #5A4181 !Important;
-        }
-
-        .pagination > .active > a:hover
-        {
-            background-color: #5A4181 !Important;
-            border: solid 1px #5A4181;
-        }
-
-        .navbar-gold {
-            background-color: #6A5638;
-        }
-        .navbar-gold .nav-link{
-            color: white;
-        }
-
-        .navbar-gold .navbar-brand {
-            color: white;
-            font-size: 3rem;
-            text-align: center;
-            padding-top: 15px;
         }
 
         .bg-maroon {
@@ -94,23 +45,32 @@
 {% include 'nav.html' %}
 
 {% block content %}
-    <div class="container-fluid" style="border-spacing: 10px 0px; min-height: 100%; height: 100%;">
-        <div class="card">
+    <div class="container" style="border-spacing: 10px 0px; min-height: 100%; height: 100%;">
+        <div class="row card">
             <form action="" method="post" novalidate align="" style="">
                 <div class="input-group">
                     {{ form.hidden_tag() }}
-                    {{ form.search(type="text", class_="form-control", placeholder="Search for a course!") }}
+                    {{ form.search(type="text", class_="form-control fs-3", placeholder="Search for a course!") }}
                     {{ form.submit(class_="input-group-text") }}
                 </div>
             </form>
         </div>
         <br />
-        <div class="card py-3">
+        <div class="row card py-3 text-dark bg-light">
+            <h2 class="card-header">Courses</h2>
+            <div class="card-body">
+            {% if courses|length == 0 %}
+                Search for a course!
+            {% else %}
+            <ul class="list-group list-group-flush">
             {% for course in courses %}
-                <div class="card" style="border-spacing: 2px 2px;">
-                    <h3><a style="color: darkgrey;" href="{{ url_for('course', course_id=course[0]) }}">{{ course[0] }} - {{ course[3] }}</a></h3>
-                </div>
+                <li class="list-group-item">
+                    <h3><a class="text-black" href="{{ url_for('course', course_id=course[0]) }}">{{ course[0] }} - {{ course[3] }}</a></h3>
+                </li>>
             {% endfor %}
+            {% endif %}
+            </ul>
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 <!-- Jinja Template derived from Bootstrap base template -->
 {% extends "bootstrap/base.html" %}
 <!-- Tooltip Title -->
-{% block title %}Rate My Course | Home{% endblock %}
+{% block title %}Rate My Course | Register{% endblock %}
 {% block head %}
     <!-- Preserve yhe style of the base template -->
     {{ super() }}
@@ -12,55 +12,6 @@
         body {
             background-color: #501214;
             color: lightgray;
-        }
-
-        .pagination
-        {
-            background-color: white;
-            font-size: 15px;
-        }
-        .pagination > li > a
-        {
-            background-color: white;
-            color: #5A4181;
-            font-size: 15px;
-        }
-
-        .pagination > li > a:focus,
-        .pagination > li > a:hover,
-        .pagination > li > span:focus,
-        .pagination > li > span:hover
-        {
-            color: #5a5a5a;
-            background-color: #eee;
-            border-color: #ddd;
-        }
-
-        .pagination > .active > a
-        {
-            color: white;
-            background-color: #5A4181 !Important;
-            border: solid 1px #5A4181 !Important;
-        }
-
-        .pagination > .active > a:hover
-        {
-            background-color: #5A4181 !Important;
-            border: solid 1px #5A4181;
-        }
-
-        .navbar-gold {
-            background-color: #6A5638;
-        }
-        .navbar-gold .nav-link{
-            color: white;
-        }
-
-        .navbar-gold .navbar-brand {
-            color: white;
-            font-size: 3rem;
-            text-align: center;
-            padding-top: 15px;
         }
 
         .bg-maroon {
@@ -92,37 +43,33 @@
 {% endblock %}
 
 <!-- Navigation bar -->
-{% block navbar %}
-    <div class="navbar navbar-expand-sm navbar-gold" role="navigation">
-        <div class="navbar-collapse collapse">
-            <h1 class="navbar-brand">Rate My Course</h1>
-            <ul class="navbar-nav">
-                <!-- Inline styling of Home navigation (Home link resets the page to default) -->
-                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('home') }}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="#">My Courses</a></li>
-                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="#">Search Courses</a></li>
-            </ul>
-        </div>
-    </div>
-{% endblock %}
+{% include 'nav.html' %}
 
 {% block content %}
-    <h1 style="text-align: center">Register</h1>
-    <form action="" method="post" novalidate align="center" style="padding: 100px; text-align center;">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label(class_="label label-primary") }}&nbsp;&nbsp;&nbsp;
-            {{ form.username(size=32) }}
-        </p>
-        <p>
-            {{ form.email.label(class_="label label-primary") }}&nbsp;&nbsp;&nbsp;
-            {{ form.email(size=32) }}
-        </p>
-        <p>
-            {{ form.password.label(class_="label label-primary") }}&nbsp;&nbsp;&nbsp;
-            {{ form.password(size=32) }}
-        </p>
-        <div class="msg">{{ msg }}</div>
-        {{ form.submit(class_="btn btn-success")}}
-    </form>
+    <div class="container">
+        <div class="card bg-dark-gold w-25 mx-auto">
+            <h1 class="card-header" style="text-align: center">Register</h1>
+            <form action="" method="post" novalidate align="center" style="padding: 100px; text-align: center;">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.username.label(class_="form-label fs-3") }}&nbsp;&nbsp;&nbsp;
+                    {{ form.username(class_="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.email.label(class_="form-label fs-3") }}&nbsp;&nbsp;&nbsp;
+                    {{ form.email(class_="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.password.label(class_="form-label fs-3") }}&nbsp;&nbsp;&nbsp;
+                    {{ form.password(class_="form-control") }}
+                </div>
+                {% if msg|length > 0 %}
+                    <div class="alert alert-danger w-100" role="alert">
+                      {{ msg }}
+                    </div>
+                {% endif %}
+                {{ form.submit(class_="btn btn-primary fs-3")}}
+            </form>
+        </div>
+    </div>
 {% endblock %}

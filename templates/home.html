@@ -14,20 +14,6 @@
             color: lightgray;
         }
 
-        .navbar-gold {
-            background-color: #6A5638;
-        }
-        .navbar-gold .nav-link{
-            color: white;
-        }
-
-        .navbar-gold .navbar-brand {
-            color: white;
-            font-size: 3rem;
-            text-align: center;
-            padding-top: 15px;
-        }
-
         .bg-maroon {
             background-color: #501214;
         }
@@ -54,6 +40,7 @@
     <!-- Include Bootstrap and jQuery scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 {% endblock %}
 
 <!-- Navigation bar -->
@@ -61,21 +48,23 @@
 
 
 {% block content %}
-    <div class="container-fluid" style="border-spacing: 10px 0px; min-height: 100%; height: 100%;">
-        <div class="row">
-            <div class="col bg-salmon" style="padding-bottom: 10px; height: 90%">
+    <div class="container-fluid" style="">
+        <div class="row row-eq-height">
+            <div class="col h-100 w-100 card bg-salmon" style="padding-bottom: 10px">
                 <h2 class="text-center" style="font-size: 40px">Welcome to Rate my Course!</h2>
-                <span style="display:block; font-size: 32px;" class="large text-center ">Login or Register below to get started!</span>
-                <div class="container-fluid">
+                <span style="" class="large text-center fs-2">Login or Register below to get started!</span>
+                <div class="card-body">
                     <div class="row">
-                        <div class="col btn bg-maroon"><a style="color: lightgray;" href="{{ url_for('login') }}">Login</a></div>
-                        <div class="col btn bg-dark-gold"><a style="color: lightgray;" href="{{ url_for('register') }}">Register</a></div>
+                        <div class="col btn bg-maroon fs-3"><a style="color: lightgray;" href="{{ url_for('login') }}">Login</a></div>
+                        <div class="col btn bg-dark-gold fs-3"><a style="color: lightgray;" href="{{ url_for('register') }}">Register</a></div>
                     </div>
                 </div>
             </div>
-            <div class="col" style="background-color: #DB6450;">
-                <h2 class="text-center" style="font-size: 40px">ABOUT</h2>
-                <p class="text-center" style="font-size: 32px;">Rate My Course is built for college students. Relating to others interactions on the site has become a key way for students to deal with choosing courses to take. The site does what students have been doing forever - checking in with each other – their friends, their brothers, their sisters, their classmates – to figure out which classes are best and which ones you might want to avoid.</p>
+            <div class="col h-100 w-100 card" style="background-color: #DB6450;">
+                <h2 class="card-header text-center" style="font-size: 40px">ABOUT</h2>
+                <div class="card-body">
+                    <p class="card-text text-center fs-2">Rate My Course is built for college students. Relating to others interactions on the site has become a key way for students to deal with choosing courses to take. The site does what students have been doing forever - checking in with each other – their friends, their brothers, their sisters, their classmates – to figure out which classes are best and which ones you might want to avoid.</p>
+                </div>
             </div>
         </div>
     </div>
